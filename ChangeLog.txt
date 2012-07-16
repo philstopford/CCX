@@ -1,0 +1,457 @@
+ChangeLog
+
+***********
+15-Jul-2012
+-----------
+
+- Trying to workaround the 2nd player crash images, so far without luck.
+
+***********
+13-Jul-2012
+-----------
+
+- Xcode 4.4 project now.
+- Mountain Lion GM tested!
+- The graphics screw-up appears to be solely due to the SetGammaRamp in FadeOut/FadeIn, so I've disabled those calls for now.
+- SDL_image frameworks are all now the latest versions. SDL_image 1.2.12 is minimum due to breakage in 1.2.11 that affects the sprite loading.
+- The Blit combination errors have been crudely worked around for PICT_2005 by duplicating PICT_1005 as PICT_2005 for testing. This solves that problem, but obviously the code needs to be made more intelligent.
+- However, the game is running slowly. I don't yet know why.
+- I re-fixed the Xcode brain damage that didn't copy all the SDL frameworks into the app bundle.
+- I also fixed the other brain damage that had some images missing from the source tree.
+
+***********
+18-Oct-2011
+-----------
+
+- Game runs under Lion, but colours are all screwed up. Investigating.
+- Finally got a copy of the SDL-1.2 framework for Lion. After a brief fight with Xcode 4.2, have it compiled as a framework.
+- Re-fixed the framework packaging quirk noted earlier.
+- Blit combination error related to references to a 'missing' asset (intentionally so). This is referenced as picBoardRight with an offset value of 5 from picBoard via an enum, but no such file exists for many levels. This is described in PrepareStageGraphics() in level.cpp.
+ - Added a conditional check to try and clean this up here and in gworld.cpp as well.
+
+***********
+13-Mar-2011
+-----------
+
+- Still non-functional on Lion.
+- Fixed packaging issues (no frameworks being copied into .app bundle) following migration to XCode 4.
+
+***********
+11-Mar-2011
+-----------
+
+- Testing demonstrated that the previous build was not functional on OS X Lion. As such, this revision pulls the codebase in to XCode 4 and builds against the Snow Leopard SDK using the default LLVM GCC 4.2 compiler. Testing shows that this build remains functional on Snow Leopard. Testing on Lion is pending.
+
+***********
+17-Jun-2010
+-----------
+
+- Finally got a chance to deal with the newprefs system when a .plist file was not already in existence. The app now handles this properly. The issue lay in the retrieval of numeric values from the .plist. The implementation has been changed to use a helper function provided by the OS.
+
+***********
+28-Dec-2009 (reverse chronological order)
+-----------
+
+- Removed AppKit Framework from project.
+- Fixed bug in music.cpp that led to issue where music was never able to be turned off. Used to work, but something broke the implementation - possible SDL_mixer update related.
+
+
+***********
+12-Dec-2009 (reverse chronological order)
+-----------
+
+- Removed local copy of SDL_image.h in source.
+- Wrapped more SDL_mixer usage in preprocessor checks. Oops.
+- SDL_image above 1.2.7 give rise to graphics loading issues. Not sure why yet. Reverted back to SDL_image 1.2.7 for now. Seems to be related to IMG_Init, but that doesn't seem to be the whole story.
+
+***********
+11-Dec-2009 (reverse chronological order)
+-----------
+
+- Tidied up includes in prefs code :
+	- includes specific to each implementation now within preprocessor conditionals.
+- Moved SDL key lookup code to new .cpp/.h combination.
+	- Simplifies prefs.cpp file.
+- Removed SDLU include in prefs.cpp. Doesn't appear to be needed.
+- Removed ppc arch - no way to test that platform.
+- Moved old prefs' endian comments to relevant section of that .cpp file.
+- Added various configurations to handle preprocessor directives (left disabled definitions in place and added comments) so can generate 4 builds easily.
+	- SDL_mixer framework still copied into place for fmod builds right now - still to find a way to make this conditional based on build config.
+- Updated SDL_image to 1.2.10
+- Updated SDL_mixer to 1.2.11
+- Updated SDL to 1.2.14
+
+TO-DO :
+	- Find a way to prevent SDL_mixer framework being linked and copied in the fmod build configurations.
+	- Rejig dialog code in pause.cpp/.h to make it more sensible and clearer.
+	- Implement use of iTunes library for music, if available, and only for SDL_Mixer. Perhaps also add option if dialog code not a total nightmare.
+	- Comment the existing, and new, code.
+	- Move init code from main to a new init file, or to resources combination as the case may be.
+
+***********
+
+Dev environment set up update :
+-------------------------------
+
+- Installed SDL.framework, SDL_image.framework and SDL_mixer.framework as per instructions for XCode 3.2
+- FMod is referenced from project folder and links statically into bundle.
+- SDL Frameworks are linked and bundled into .app
+- Only compile for x86 right now.
+
+***********
+
+
+***********
+07-Oct-2009 (reverse chronological order)
+-----------
+
+- Minor syntax tweaks for the preprocessor in the music and soundfx files, also to aid readability.
+- Added some sanity checks to the handling of newprefs build option, to ensure that newprefs only gets incorporated on supported platforms (i.e. Apple)
+- Persuaded to restore FMod implementation as a build option and configuration (Release FMod). Default is SDLMixer, set via definition of UseSDLMixer in the soundfx.cpp and music.cpp files. FMod build configuration sets -lfmod in the linker command line.
+- Converted use of CFBooleans to CFNumbers in the preference list - easier to maintain and fixes also the issues with combo playback.
+- Fixed missing CandyCrisis logo on the controls dialog and cleaned up further from the removal of no longer needed dialogs. No functional difference - simply removed commented out sections to aid readability.
+- Removed fixliblinks.sh - no longer needed.
+- Removed unneeded int casts in prefs.cpp for combo read.
+- Blocked out kPrefsList in prefs.cpp/.h from OS X x86 compile via preprocessor. Unused in that configuration. Minor optimisation.
+- Investigating blob change issue in combo playback.
+	- Verified present in code back to 20th September. Curious.
+
+TO-DO :
+	- SDL 1.2.14 brings a slew of changes (including ImageIO support and Snow Leopard compatibility). Will need to test CCX against it.
+	- Rejig dialog code in pause.cpp/.h to make it more sensible and clearer.
+	- Implement use of iTunes library for music, if available, and only for SDL_Mixer. Perhaps also add option if dialog code not a total nightmare.
+	- Comment the existing, and new, code.
+	- Move init code from main to a new init file, or to resources combination as the case may be.
+
+***********
+01-Oct-2009 (reverse chronological order)
+-----------
+
+- Replaced if/elseif combination in hiscore entry with switch/case and migrated also to use SDLKey. Backspace detection now works.
+
+TO-DO :
+	- Rejig dialog code in pause.cpp/.h to make it more sensible and clearer.
+	- Combo playback from saved combos is…strange - seems to be acting up for some unknown reason. Playback of default combo is not affected.
+	- Implement use of iTunes library for music, if available. Perhaps also add option if dialog code not a total nightmare.
+	- Comment the existing, and new, code.
+	- Move init code from main to a new init file, or to resources combination as the case may be.
+	- More graceful failure mode when certain resources cannot be found - Bus Error is misleading and uninformative.
+		- There already was some error handling in place for certain resources, but there is a crash bug lurking in there somewhere when certain resources cannot be found.
+
+***********
+23-Sep-2009 (reverse chronological order)
+-----------
+
+- 4 KB reduction in executable size by
+	- Removing wincompat.h - it did not seem to be used.
+	- Removing RegAlgorithm from code and project.
+- Fixed stupid bug that overwrote retrieved combo player name with 'Tutorial'.
+- Stupid error led to assigning return of CFNumberGetValue to grid value in Combo. Should fix combo issue now.
+- Added debug code to dump combo grid to console at load and save. Trying to figure out what broke.
+- Disabled printfs that are no longer needed.
+- Odd problem with Combo screen when no game yet played - uncertain as to cause. Might be dialog index related (again). Looking for route to triage.
+- Missed an iteration of 'i' in the hiscore loading code. Added and seems to have fixed array indexing error (unsurprisingly).
+- Added debug printfs to the addhiscore function in hiscore.cpp to dump array states - need to understand nature of sorting error.
+- In triaging the hiscore/combo issues, noticed a check for the delete key being held down (to reset the data). It looked odd, so have disabled this for now in hiscore.cpp. Should be using SDLKey, I suspect.
+- Failsafed the combo load code by exporting the defaultBest combo move and mapping that in to best.combo if something breaks.
+- Investigating the hiscore and combo save/load code. It seems to be faulty :
+	- Score/name arrays are not being sorted in-game and also before save and after load, so we're seeing positional errors.
+	- Combo score is loading, but name is always set to Tutorial
+	- plist data looks valid.
+
+***********
+21-Sep-2009 (reverse chronological order)
+-----------
+
+- Over 400 KB shaved from executable due to removal of FMod. The SDL_mixer framework adds a lot more, though.
+- Removed fmod code where known good SDL_mixer versions implemented.
+- Renamed fmodmusic to music
+- Replaced empty soundfx.cpp with fmodsoundfx (renamed to soundfx.cpp)
+- Removed fmod.h and fmoderrors.h
+- Added SDLK_UNKNOWN to the ASCII_SDLKey function to avoid any unexpected fallout from failed switch check.
+- Restored platform support to the Initialize() function in main.cpp.
+- Wrapped up the call from Initialize() to InitResources() in an OS X preprocessor check.
+- Tidied up prefs.h by commenting out a couple of obsolete exports, and wrapping up the OS X specific functions (and otherwise) with conditionals. CoreFoundation includes placed inside the __APPLE__ block.
+- Replaced FMod with SDL_mixer to play both the music and sound effects.
+	- Had originally planned to move to mp3/ogg formats, but it seems that SDL_Mixer allows for MOD playback… Neat.
+	- SDL_mixer is copied into the app frameworks folder, just like SDL and SDL_image.
+	- Some sound effects play too quickly, and SDL_mixer also lacks the ability to speed up MOD playback, so there are some compromises in the implementation.
+- Keyboard load/save code is now working.
+
+TO-DO :
+	- Comment the existing, and new, code.
+	- Move init code from main to a new init file, or to resources combination as the case may be.
+	- More graceful failure mode when certain resources cannot be found - Bus Error is misleading and uninformative.
+		- There already was some error handling in place for certain resources, but there is a crash bug lurking in there somewhere when certain resources cannot be found.
+
+***********
+20-Sep-2009 (reverse chronological order)
+-----------
+
+- libSDL_image framework added to copy step.
+- Replaced libSDL_image dylib with framework.
+- Discovered the application services framework which provides libpng and libjpeg. Have added this framework and removed the original libjpeg and libpng libraries from the project.
+- Disabled key preference support for now to work on packaging issues.
+- libfmod.a remains a required library.
+
+TO-DO :
+	- Replace libfmod and mods with mp3 playback.
+	- Comment the existing, and new, code.
+	- Move init code from main to a new init file, or to resources combination as the case may be.
+	- More graceful failure mode when certain resources cannot be found - Bus Error is misleading and uninformative.
+		- There already was some error handling in place for certain resources, but there is a crash bug lurking in there somewhere when certain resources cannot be found.
+
+***********
+18-Sep-2009 (reverse chronological order)
+-----------
+
+- Still failing to launch on Pallavi's machine.
+- Load code for keys is faulty.
+- Save support for keys working (although saves numeric rather than SDL_blah data).
+- Working on key support in the preference system.
+
+***********
+17-Sep-2009 (reverse chronological order)
+-----------
+
+- Restored platform sensitive code conditionals for the preprocessor. No reason to kill other platforms.
+- Removed some obsolete .a libs from the source folder.
+- Optimised preference save/load code now that general approach works.
+	- Preference structure may change, so leaving some debug-oriented printf-s in the critical areas.
+- Completed all load/save preference support, and compartmentalised for Mac build. Only missing feature is key support.
+- Hiscore loading verified as working.
+- Hiscore saving to plist now works - thanks to Mike Wolf for the hint about CFRelease.
+- Deferring keys handling right now.
+- Working on the best struct handling.
+	- Load code now sets defaults if no preferences found.
+	- Initial save implementation code. Rather intimidating.
+		- combo Grid row loading and saving works in the very first iteration! \o/
+
+TO-DO :
+	- Complete preference code testing and implementation - playerKeys still to be dealt with.
+	- Fix packaging issues.
+	- Comment the existing, and new, code.
+	- Move init code from main to a new init file, or to resources combination as the case may be.
+	- More graceful failure mode when certain resources cannot be found - Bus Error is misleading and uninformative.
+		- There already was some error handling in place for certain resources, but there is a crash bug lurking in there somewhere when certain resources cannot be found.
+
+***********
+16-Sep-2009 (reverse chronological order)
+-----------
+
+- Mapping to save data structures for hiscore data works, but stumped by a crash at the set app data step. Seeking guidance.
+
+TO-DO :
+	- Complete preference code testing and implementation - playerKeys and (when complete) best are still to be dealt with.
+	- Write the save code for the best struct. (eek)
+	- Fix packaging issues.
+	- Comment the existing, and new, code.
+	- Move init code from main to a new init file, or to resources combination as the case may be.
+	- More graceful failure mode when certain resources cannot be found - Bus Error is misleading and uninformative.
+		- There already was some error handling in place for certain resources, but there is a crash bug lurking in there somewhere when certain resources cannot be found.
+	- Fix fade to/from full screen in transitions.
+	- Complete migration to plist for preferences : combo remains unimplemented.
+	- Nuke code loops for other platforms.
+
+***********
+15-Sep-2009 (reverse chronological order)
+-----------
+
+- Highscore name/score data now in testing.
+- Progress made on the preferences code. Verified functional for load and save are :
+	- music
+	- sound
+
+TO-DO :
+	- Complete preference code testing and implementation - playerKeys and (when complete) best are still to be dealt with.
+	- Write the save code for the best struct. (eek)
+	- Fix packaging issues.
+	- Comment the existing, and new, code.
+	- Move init code from main to a new init file, or to resources combination as the case may be.
+	- More graceful failure mode when certain resources cannot be found - Bus Error is misleading and uninformative.
+		- There already was some error handling in place for certain resources, but there is a crash bug lurking in there somewhere when certain resources cannot be found.
+	- Fix fade to/from full screen in transitions.
+	- Complete migration to plist for preferences : combo remains unimplemented.
+	- Nuke code loops for other platforms.
+
+***********
+14-Sep-2009 (reverse chronological order)
+-----------
+
+- Currently, code blows up in the preferences system. More investigation needed. Verified that switching back to old approach remains viable, so can still build working version.
+- Completed first prototype for handling the massive best struct. Save implementation still to be done.
+
+TO-DO :
+	- Diagnose plist handling errors using calls in old functions for testing.
+	- Comment the existing, and new, code.
+	- Move init code from main to a new init file, or to resources combination as the case may be.
+	- More graceful failure mode when certain resources cannot be found - Bus Error is misleading and uninformative.
+		- There already was some error handling in place for certain resources, but there is a crash bug lurking in there somewhere when certain resources cannot be found.
+	- Fix fade to/from full screen in transitions.
+	- Complete migration to plist for preferences : combo remains unimplemented.
+	- Nuke code loops for other platforms.
+
+***********
+13-Sep-2009 (reverse chronological order)
+-----------
+
+- Switching preferences over to a .plist.
+	- Experimental code, designed to map into the existing structs where needed. This was a fairly large undertaking, and needs testing. Combo saving is last remaining chunk - it will be implemented in the next revision.
+	- Load and save support in place for all features. Comments added throughout.
+	- Can revert by commenting the new code out, and the old code back in.
+
+TO-DO :
+	- Comment the existing, and new, code.
+	- Move init code from main to a new init file, or to resources combination as the case may be.
+	- More graceful failure mode when certain resources cannot be found - Bus Error is misleading and uninformative.
+		- There already was some error handling in place for certain resources, but there is a crash bug lurking in there somewhere when certain resources cannot be found.
+	- Fix fade to/from full screen in transitions.
+	- Complete migration to plist for preferences : combo remains unimplemented.
+	- Nuke code loops for other platforms.
+
+***********
+12-Sep-2009 (reverse chronological order)
+-----------
+
+- Resolved crash on controls screen. The dialog enum was not updated in line with the removal of registration and shareware dialogs. The kNumDialogs change in length needed to be synchronised with the rest of the code :
+
+	NumDialogs enum looked like this :
+		kHiScoreDialog,
+		kContinueDialog,
+		kRegisterDialog,
+		kControlsDialog,
+		kSharewareNoticeDialog,
+		kEnterCodeDialog,
+		kNumDialogs
+
+	and now looks like this :
+		kHiScoreDialog,
+		kContinueDialog,
+		/*kRegisterDialog,*/
+		kControlsDialog,
+		/*kSharewareNoticeDialog,
+		kEnterCodeDialog,*/
+		kNumDialogs
+
+	The dialog code really needs me to sit down and understand it better. Then I'll comment it. I've inserted the enum structure alongside those places that use it, and commented out the relevant dialog fields. Until I've got confidence in the structure, I'm not willing to remove the code from the project entirely.
+	I will go and check other enums and their usage to prevent similar errors.
+
+- Added code to PICTExists() to report file not found events.
+- Dealt with return code from initializeBundleLoading() in InitResources() to handle condition that resources not found.
+- Added CFRelease in initializeBundleLoading()
+- Removed dead code from SDLU
+- Game runs slowly in window mode due to SDL issues. Fullscreen is a lot better. Avoiding window for now.
+- Wrote fixliblinks.sh to automate the post-build changes for libraries and app links.
+- Added libSDL-1.2.0.dylib to the copy files to Framework build step. It is not present in the target - the framework handles that. For some reason, though, the libSDL-image.dylib pulls in the libSDL.dylib. This works around that until I understand the situation better.
+- Replaced /usr/local/bin symlinks from SDL(-image) builds -1.2.0 with real file copies due to OS X stupidity resolving symlinks in the file chooser.
+- Restored original game distribution ReadMe content to ReadMe.txt.
+- Restored original game Version History to source.
+
+TO-DO :
+	- Comment the existing, and new, code.
+	- Move init code from main to a new init file, or to resources combination as the case may be.
+	- More graceful failure mode when certain resources cannot be found - Bus Error is misleading and uninformative.
+		- There already was some error handling in place for certain resources, but there is a crash bug lurking in there somewhere when certain resources cannot be found.
+	- Fix fade to/from full screen in transitions.
+	- Fix the prefs.cpp file handling so that the preferences are stored somewhere more sensible. Will need to determine how to point at the user's preferences folder and then go from there.
+		- Long term, consider migrating the preferences to a .plist.
+		- Found template code for preferences/.plist handling. Will give a trial run once the distribution issue is confirmed to be fixed.
+	- Nuke code loops for other platforms.
+
+***********
+11-Sep-2009 (reverse chronological order)
+-----------
+
+- Restored original _ReadMe_ from source archive. It got lost in the shuffle.
+- Migrated original massive comment block to Original_main-cpp_info.txt
+- Adjusted info.plist to point at ReadMe for copyright and to have version and so on.
+- About box now informative.
+- Commented, and then commented out, the dock icon generation code in ReserveMonitor(). We get the app icon in the dock now and save some code and CPU time.
+- Created icon.icns and now use as .app icon.
+- Removed code to draw registeredString on menu screen and removed registeredString.
+- Fixed random entry on menu screen due to undefined registeredString value.
+- Adjusted FileExists() logic to make it slightly less chunky.
+- Removed Code Entry related functions - no longer needed.
+- Removed Shareware related functions - no longer needed.
+- Removed InitRegistration() - no longer used.
+- Removed IsRegistered() - no longer used.
+- Now have the resources loaded from the .app bundle! Woohoo \o/
+	- Had to insert path separator in the QuickResourceName() function - the OS X functions return without a path separator at the end of the path.
+- App now runs for the first time!
+	- Slow, but relatively low CPU usage. Uncertain of root cause for slowness.
+- libpng was the problem caused the SDLUnit failure. Added libpng, libjpeg .a to the framework list.
+- Code currently blows up in SDLUInit for some reason. Backtrace suggests that it blows up after the second call to LoadPICTAsSurface in ReserveMonitor().
+- Hard-coded resource path for now, to ensure we can find the resources we are looking for.
+- Not using the bundle location code at the moment - uncertain how to work around the various const char * and const char* requirements.
+- FileExists() now locates and works for resources - printf diagnostics helped.
+- CFBundleResource seems to point at English.lproj. Resources therefore not correctly located right now.
+- Created resources.cpp/.h to contain the resource code. Migrated code successfully and compiles just fine.
+	- This should be the platform abstraction module of code in future, but we'll see how that goes.
+
+Side-note: having CoreFoundation in the same file as the LaunchURL() function, and also Error() seems to be bad. I've no idea why. I've moved the LaunchURL() function back to main.cpp/.h for now, just to give me room to think.
+
+TO-DO :
+	- Profile the code to determine why it runs so slowly.
+	- Audit for CF* resource leaks.
+	- Implement to/from fullscreen support, and a preference setting to drive that.
+	- Add ReadMe for copyrights.
+	- Get a static compile working, or fix the /usr/local/bin look up to be based on the bundle's Frameworks folder
+	- Fix crash with controls display.
+	- Comment the existing, and new, code.
+	- Move init code from main to a new init file, or to resources combination as the case may be.
+	- More graceful failure mode when resources cannot be found - Bus Error is misleading and uninformative.
+	- Fix fade to/from full screen in transitions.
+	- Fix the prefs.cpp file handling so that the preferences are stored somewhere more sensible. Will need to determine how to point at the user's preferences folder and then go from there.
+		- Long term, consider migrating the preferences to a .plist.
+	- Nuke code loops for other platforms.
+
+***********
+10-Sep-2009
+-----------
+
+- Unpacked Candy Crisis 1.2 Windows sources.
+- Applied linux/OS X cc-mac-linux patch to Windows sources as per sourceforge comment.
+- Changed Makefile CC and CXX specifically to -4.0 versions due to -4.2 being default on OS X 10.6 and there being compatibility issues.
+- Nursed compile until no errors (in particular, the need to specify i386 as arch), then moved to bringing in to XCode.
+	- Candy Crisis X was based on an existing Carbon template.
+	- CCX, which now compiles, was based on the SDL application template. Added .a and .frameworks to project for linking purposes.
+- XCode required setting compiler version to GCC 4.0; adding the LD_FLAGS to the linker setting and also specifying i386 as the only architecture to build.
+- XCode compiles cleanly, but app crashes in ReserveMonitor() in main.cpp with a memory exception. This function appears relatively harmless, using SDL functions to achieve its goals. However, the LoadPICTAsSurface() calls are interesting :
+
+	LoadPICTAsSurface() resides in gworld.cpp and calls QuickResourceName() that is located in main.cpp. The aim of QuickResourceName() is to take three inputs and generate a filesystem path based on the host OS. 
+
+	Side-note: the approach in LoadPICTAsSurface can needlessly call QuickResourceName() twice - once for a .png look-up and, if that fails, once again for a .jpg look-up. It would be simpler to append the .jpg or .png in the FileExists() call. PICTExists() is a function residing in the same gworld.cpp file and would appear to achieve much the same thing - lots of code duplication potential in this source dump.
+
+	- According to .app characteristics, all of our sound/music/graphics are located in the .app's Resources folder. We cannot expressly use those without adding some extra voodoo, part of which has now been done. The information is based on that located at http://experimentgarden.blogspot.com/2009/06/how-to-load-resource-from-your.html and preserved locally.
+	- Adding the bundle look-up seems, for some reason, to have impacted Error() in main.cpp, but since this was largely useless, I commented out that entire function's contents. There is some other fallout.
+
+TO-DO :
+	- Nuke code loops for other platforms.
+	- Migrate file-utility code to a specific .cpp/.h pairing to improve organisation of code.
+	- Consider refactoring the code in gworld.cpp to reduce clutter.
+	- Rewrite the QuickResourceName() to use the bundle resource code mentioned above. See if that resolves the crash in ReserveMonitor().
+
+***********
+
+Dev environment set up:
+-----------------------
+
+- Installed SDL.framework and SDL_image.framework as per instructions for XCode (/Library/Frameworks). No good for commandline use, so :
+- Compiled and installed Unix-style SDL 1.2.13 and SDL_image 1.2.7 from source on OS X 10.6 using :
+
+env CC='/usr/bin/gcc-4.0' CFLAGS='-isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386' LDFLAGS='-arch i386' ./configure --without-x
+
+- Needed to install libjpeg-7 and libpng as well.
+- Placed libfmodx86.a as libfmod.a in /usr/local/lib
+
+- Due to the limitations of the linking system, some voodoo is needed to replace the /usr/local/lib references for some of the library files :
+
+Get a list of the libraries linked in :
+otool -L CCX
+
+To replace :
+install_name_tool -change /usr/local/lib/library.a @loader_path/library CCX
+
+Currently putting the script in fixliblinks.sh for testing.
+
+***********
