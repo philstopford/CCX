@@ -43,6 +43,8 @@ static void	SDLUi_Blit8BitTo1Bit( SDL_Surface* surface8, SDL_Rect* rect8,
 	
 	int          x, y, across, down;
 	SDL_Color*   palette8;
+
+	rect8; // is unused for now
 	
 //	ASSERTN( surface8->format->BitsPerPixel == 8, surface8->format->BitsPerPixel );
 //	ASSERTN( surface1->format->BitsPerPixel == 1, surface8->format->BitsPerPixel );
@@ -120,9 +122,9 @@ static void	SDLUi_Blit15BitTo16Bit( SDL_Surface* surface15, SDL_Rect* rect15,
 		for( x=0; x<rect16w; x++ )
 		{
 			work = src[x];
-			work = ((work << 1) & 0xFFC0) |
-			       ((work >> 4) & 0x0020) |
-			       ((work     ) & 0x001F);
+			work = (work << 1) & 0xFFC0 |
+			       (work >> 4) & 0x0020 |
+			       (work     ) & 0x001F;
 			       
 			dst[x] = work;
 		}
@@ -177,8 +179,8 @@ static void	SDLUi_Blit16BitTo15Bit( SDL_Surface* surface16, SDL_Rect* rect16,
 		for( x=0; x<rect15w; x++ )
 		{
 			work = src[x];
-			work = ((work >> 1) & 0x7FE0) |
-			       ((work     ) & 0x001F);
+			work = (work >> 1) & 0x7FE0 |
+			       (work     ) & 0x001F;
 			       
 			dst[x] = work;
 		}
@@ -554,15 +556,15 @@ void SDLU_BlitFrontSurface( SDL_Surface* source, SDL_Rect* sourceSDLRect, SDL_Re
 
 void SDLU_SetBrightness( float b )
 {
-	Uint16 table[256]; // necessary as the gamma ramp function takes Uint16
+	Uint16 table[256];
 	int    index;
 	
 	for( index=0; index<256; index++ )
 	{
-		table[index] = (int)(index * b * 257.0f); // 255 * 257 = 65535 
+		table[index] = (int)(index * b * 257.0f); // 255 * 257 = 65535
 	}
 	
-	SDL_SetGammaRamp( table, table, table );
+//	SDL_SetGammaRamp( table, table, table );
 }
 
 void SDLU_Yield()

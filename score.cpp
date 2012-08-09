@@ -45,8 +45,9 @@ void InitScore( void )
 	scoreSurface = SDLU_InitSurface( SDLU_MRectToSDLRect( &scoreWindowZRect, &sdlRect ), 16 );
 	DrawPICTInSurface( scoreSurface, picBoard );
 	
+    printf("picNumber is %d\n", picNumber);
 	numberSurface = LoadPICTAsSurface( picNumber, 16 );
-
+    printf("picNumbermask is %d\n", picNumberMask);
 	numberMaskSurface = LoadPICTAsSurface( picNumberMask, 1 );
 	
 	displayedScore[0] = displayedScore[1] = 0;

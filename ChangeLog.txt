@@ -1,6 +1,13 @@
 ChangeLog
 
 ***********
+08-Aug-2012
+-----------
+
+- Reverted back to June 2010 code. Seems to run faster, and with the SDL_SetGammaRamp commented out, the issues with colour corruption under OS X Lion and later are gone.
+- Scores and level information is reliant on SDL_image 1.2.7 for OS X (at least). Later versions cause the score and level information to not be displayed. No idea why.
+
+***********
 15-Jul-2012
 -----------
 
