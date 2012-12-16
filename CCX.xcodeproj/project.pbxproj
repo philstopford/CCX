@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		002F3A2E09D0888800EBEB88 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 002F3A2C09D0888800EBEB88 /* SDLMain.m */; };
-		4A1C32E6132CC82500B5AB12 /* SDL_mixer.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 4A33A52D132A793D00107561 /* SDL_mixer.framework */; };
-		4A1C32E7132CC82A00B5AB12 /* SDL.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 4A33A529132A791300107561 /* SDL.framework */; };
 		4A2A0CC4105AC4D50056A361 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4A2A0CC3105AC4D50056A361 /* icon.icns */; };
 		4A2AF49F15B1066500B44691 /* SDL_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A2AF49E15B1066500B44691 /* SDL_image.framework */; };
 		4A2AF5CB15B10D8600B44691 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4A2AF4A115B10D8600B44691 /* InfoPlist.strings */; };
@@ -160,10 +158,12 @@
 		4A2AF65D15B10D8600B44691 /* snd_142.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4A2AF5C515B10D8600B44691 /* snd_142.wav */; };
 		4A2AF65E15B10D8600B44691 /* snd_143.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4A2AF5C715B10D8600B44691 /* snd_143.wav */; };
 		4A2AF65F15B10D8600B44691 /* snd_144.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4A2AF5C915B10D8600B44691 /* snd_144.wav */; };
-		4A2AF66015B10E1000B44691 /* SDL_image.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 4A2AF49E15B1066500B44691 /* SDL_image.framework */; };
 		4A33A52A132A791300107561 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A33A529132A791300107561 /* SDL.framework */; };
 		4A33A52E132A793D00107561 /* SDL_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A33A52D132A793D00107561 /* SDL_mixer.framework */; };
 		4A4EAF9B10D2793E00A79A54 /* SDLKeyLookup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A4EAF9A10D2793E00A79A54 /* SDLKeyLookup.cpp */; };
+		4A5D2AFB15D48F87009E6582 /* SDL_image.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 4A2AF49E15B1066500B44691 /* SDL_image.framework */; };
+		4A5D2AFC15D48F87009E6582 /* SDL.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 4A33A529132A791300107561 /* SDL.framework */; };
+		4A5D2AFD15D48F87009E6582 /* SDL_mixer.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 4A33A52D132A793D00107561 /* SDL_mixer.framework */; };
 		4A685CE4105BC8D500729373 /* SDLU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A685CE2105BC8D500729373 /* SDLU.cpp */; };
 		4A876CB710599FA100BE1CC5 /* blitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A876C7710599FA100BE1CC5 /* blitter.cpp */; };
 		4A876CB810599FA100BE1CC5 /* control.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A876C7A10599FA100BE1CC5 /* control.cpp */; };
@@ -202,13 +202,13 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		002F39FD09D0883400EBEB88 /* Copy Frameworks into .app bundle */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4A1C32E6132CC82500B5AB12 /* SDL_mixer.framework in Copy Frameworks into .app bundle */,
-				4A1C32E7132CC82A00B5AB12 /* SDL.framework in Copy Frameworks into .app bundle */,
-				4A2AF66015B10E1000B44691 /* SDL_image.framework in Copy Frameworks into .app bundle */,
+				4A5D2AFB15D48F87009E6582 /* SDL_image.framework in Copy Frameworks into .app bundle */,
+				4A5D2AFC15D48F87009E6582 /* SDL.framework in Copy Frameworks into .app bundle */,
+				4A5D2AFD15D48F87009E6582 /* SDL_mixer.framework in Copy Frameworks into .app bundle */,
 			);
 			name = "Copy Frameworks into .app bundle";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -793,7 +793,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Phil Stopford";
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "CCX" */;

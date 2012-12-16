@@ -67,9 +67,6 @@ char         registeredName[64] = "Freeware";
 char         registeredKey[18] = ""; // size is strange just to perplex hackers
 void         (*DoFullRepaint)() = NoPaint;
 MBoolean     needsRefresh = false;
-Uint16* redGamma;
-Uint16* greenGamma;
-Uint16* blueGamma;
 
 int main(int argc, char *argv[])
 {
@@ -87,14 +84,14 @@ int main(int argc, char *argv[])
 
 	// Init SDL_Image - only applies above 1.2.7
 	// load support for the JPG and PNG image formats
-	int IMGflags=IMG_INIT_JPG|IMG_INIT_PNG;
+/*	int IMGflags=IMG_INIT_JPG|IMG_INIT_PNG;
 	int initted=IMG_Init(IMGflags);
-	if(initted && IMGflags != IMGflags) {
+	if(initted&IMGflags != IMGflags) {
 		printf("IMG_Init: Failed to init required jpg and png support!\n");
 		printf("IMG_Init: %s\n", IMG_GetError());
 		// handle error
 	}
-
+*/
 		
 #ifdef UseSDLMixer
 	// Initialize SDL mixer.
@@ -102,11 +99,10 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "Unable to initialize audio: %s\n", Mix_GetError());
 		exit(1);
 	}
-#endif
-    
-    // Retrieve display gamma for reference in fade in/fade out routines.
-    SDL_GetGammaRamp(redGamma, greenGamma, blueGamma);
-//    printf("%u", *redGamma);
+#endif	
+
+	argc, argv;
+	
 	Initialize( );	
 
 	LoadPrefs( );
@@ -356,7 +352,7 @@ void ReserveMonitor( void )
 #endif
 	SDL_ShowCursor( SDL_DISABLE );
 	
-	frontSurface = SDL_SetVideoMode( 640, 480, 24, SDL_SWSURFACE | SDL_FULLSCREEN );
+	frontSurface = SDL_SetVideoMode( 640, 480, 16, SDL_SWSURFACE | SDL_FULLSCREEN);
 
 	SDL_WM_SetCaption( "Candy Crisis", "CandyCrisis" );
 }
@@ -402,17 +398,17 @@ void Initialize( void )
 	SDL_SetEventFilter( SDLU_EventFilter );
 }
 
-void QuickFadeIn( /*MRGBColor *color*/ )
-{    
-    return;
-//broken
-/*#ifndef TARGET_API_MAC_CARBON
+void QuickFadeIn( MRGBColor *color )
+{
+	color; // is unused
+
+#ifndef TARGET_API_MAC_CARBON
 	long  c;
 	float percent;
 
 	for( percent=0.0f; percent<1.0f; percent += 0.04f )
 	{
-		c = MTickCount( );
+		c = MTickCount( ); 
 		SDLU_SetBrightness( percent );
 		while( c == MTickCount( ) ) 
 		{  
@@ -420,15 +416,15 @@ void QuickFadeIn( /*MRGBColor *color*/ )
 		}
 	}
 	
-	SDLU_SetBrightness( 1.0 );
+	SDLU_SetBrightness( percent );
 #endif
-*/}
+}
 
-void QuickFadeOut( /*MRGBColor *color*/ )
+void QuickFadeOut( MRGBColor *color )
 {
-    return;
-    
-/*#ifndef TARGET_API_MAC_CARBON
+	color; // is unused
+
+#ifndef TARGET_API_MAC_CARBON
 	long   c;
 	float  percent;
 
@@ -442,9 +438,9 @@ void QuickFadeOut( /*MRGBColor *color*/ )
  		}
 	}
 	
-	SDLU_SetBrightness( 0.0 );
+	SDLU_SetBrightness( percent );
 #endif
-*/}
+}
 
 void WaitForRegainFocus()
 {
